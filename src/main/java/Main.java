@@ -3,6 +3,7 @@ import org.ice1000.jimgui.util.JniLoader;
 
 public class Main {
     public static void main(String... args){
+        System.setProperty("os.name", "Windows 10");
         JniLoader.load();
         try (JImGui imGui = new JImGui()) {
             // load fonts, global initializations, etc.
