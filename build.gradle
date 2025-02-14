@@ -11,11 +11,9 @@ java {
 compileJava.options.encoding = 'UTF-8'
 
 application {
-    mainClass = 'Test'
+    mainClass = 'Main'
     try {
-        if (libPath) {
-            applicationDefaultJvmArgs = ["-Djava.library.path=$libPath"]
-        }
+        if (libPath) applicationDefaultJvmArgs = ["-Djava.library.path=$libPath"]
     } catch (ignored) {}
 }
 

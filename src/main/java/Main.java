@@ -1,7 +1,7 @@
 import org.ice1000.jimgui.JImGui;
 import org.ice1000.jimgui.util.JniLoader;
 
-public class Test {
+public class Main {
     public static void main(String... args){
         JniLoader.load();
         try (JImGui imGui = new JImGui()) {
