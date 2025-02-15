@@ -23,9 +23,7 @@ public class Texture {
             handFire = new Texture("res/hand/handFire.png", 64, imGui);
             hand2BeforeFire = new Texture("res/hand/hand2BeforeFire.png", 64, imGui);
             hand1BeforeFire = new Texture("res/hand/hand1BeforeFire.png", 64, imGui);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
     }
 
     public final int SIZE;

@@ -8,7 +8,7 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.*;
 // This class has the main game loop and map data
 public class Game {
 
-    // TODO Create Level-Editor for this shit
+    // TODO Create Level-Editor
     public static int[][] map = {
             {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
             {2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2},
