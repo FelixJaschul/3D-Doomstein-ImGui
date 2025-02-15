@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.awt.Color;
 
+import org.ice1000.jimgui.*;
+
 // this class contains most of the actual raycasting
 public class Screen {
 

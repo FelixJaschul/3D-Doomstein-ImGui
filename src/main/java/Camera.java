@@ -7,8 +7,7 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.Toolkit;
 
-import org.ice1000.jimgui.JImGui;
-import org.ice1000.jimgui.util.JniLoader;
+import org.ice1000.jimgui.*;
 
 public class Camera implements KeyListener, MouseMotionListener {
 
