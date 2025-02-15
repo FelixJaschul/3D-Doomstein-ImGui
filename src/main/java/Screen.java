@@ -10,7 +10,6 @@ public class Screen {
 	public ArrayList<Texture> textures;
 
 	public Screen(int[][] m, int mapW, int mapH, ArrayList<Texture> tex, int w, int h) {
-
 		map = m;
 		mapWidth = mapW;
 		mapHeight = mapH;
@@ -20,7 +19,6 @@ public class Screen {
 	}
 
 	public int[] update(Camera camera, int[] pixels) {
-
 		// Floor and ceiling
 		for (int n = 0; n < pixels.length / 2; n++) {
 			// if (pixels[n] != Color.DARK_GRAY.getRGB()) 
