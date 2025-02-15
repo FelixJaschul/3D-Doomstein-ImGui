@@ -6,9 +6,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.Point;
 
-import javax.swing.JFrame;
+import org.ice1000.jimgui.JImGui;
+import org.ice1000.jimgui.util.JniLoader;
 
 public class Camera implements KeyListener, MouseMotionListener {
 
@@ -19,11 +19,10 @@ public class Camera implements KeyListener, MouseMotionListener {
 	public final double ROTATION_SPEED = 0.045;
 
 	private int centerX, centerY;
-	private JFrame gameWindow;
+	private JImGui imGui;
 	private Robot robot;
 
-	public Camera(double x, double y, double xd, double yd, double xp, double yp, int screenWidth, int screenHeight, JFrame gameWindow) {
-
+	public Camera(double x, double y, double xd, double yd, double xp, double yp, int screenWidth, int screenHeight, JImGui imGui) {
 		xPos = x;
 		yPos = y;
 		xDir = xd;
@@ -31,7 +30,7 @@ public class Camera implements KeyListener, MouseMotionListener {
 		xPlane = xp;
 		yPlane = yp;
 
-		this.gameWindow = gameWindow;
+		this.imGui = imGui;
 
 		centerX = screenWidth / 2;
 		centerY = screenHeight / 2;
@@ -59,7 +58,6 @@ public class Camera implements KeyListener, MouseMotionListener {
 	}
 
 	public void update(int[][] map) {
-
 		if (forward) {
 			if (map[(int) (xPos + xDir * MOVE_SPEED)][(int) yPos] == 0) xPos += xDir * MOVE_SPEED;
 			if (map[(int) xPos][(int) (yPos + yDir * MOVE_SPEED)] == 0) yPos += yDir * MOVE_SPEED;
@@ -83,22 +81,17 @@ public class Camera implements KeyListener, MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		if (robot == null || imGui == null) return;
 
-		if (robot == null || gameWindow == null) return;
-
-		Point windowPos = gameWindow.getLocationOnScreen();
 		int dx = e.getX() - centerX;
 
 		if (dx != 0) { // Only update if there's actual movement
 			double rotationAmount = -dx * ROTATION_SPEED * 0.1;
 			rotate(rotationAmount);
 		}
-
-		robot.mouseMove(centerX + windowPos.x, centerY + windowPos.y);
 	}
 
 	private void rotate(double angle) {
-
 		double oldDirX = xDir;
 		xDir = xDir * Math.cos(angle) - yDir * Math.sin(angle);
 		yDir = oldDirX * Math.sin(angle) + yDir * Math.cos(angle);
