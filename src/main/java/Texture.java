@@ -46,9 +46,7 @@ public class Texture {
             image = ImageIO.read(new File(loc));
             ByteBuffer buffer = loadTexture(image);
             textureID = imGui.createTexture(buffer, image.getWidth(), image.getHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     private ByteBuffer loadTexture(BufferedImage image) {
