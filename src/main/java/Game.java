@@ -45,12 +45,12 @@ public class Game {
         camera = new Camera(4.5, 4.5, 1, 0, 0, -.66, width, height, imGui);
         screen = new Screen(map, mapWidth, mapHeight, textures, height, width);
 
-        textures.add(Texture.wood);        // 0
-        textures.add(Texture.brick);        // 1
-        textures.add(Texture.bluestone);    // 2
-        textures.add(Texture.stone);        // 3
-        textures.add(Texture.floor);        // 4
-        textures.add(Texture.ceiling);        // 5
+        textures.add(Texture.wood);
+        textures.add(Texture.brick);
+        textures.add(Texture.bluestone);
+        textures.add(Texture.stone);
+        textures.add(Texture.floor);
+        textures.add(Texture.ceiling);
 
         addKeyListener(camera);
         addMouseMotionListener(camera);
