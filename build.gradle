@@ -25,7 +25,6 @@ dependencies {
     String jimguiVersion = 'v0.20.3'
     implementation "org.ice1000.jimgui:core:$jimguiVersion" // basic functionality
     implementation "org.ice1000.jimgui:kotlin-dsl:$jimguiVersion" // Kotlin DSL wrapper
-
 }
 
 repositories {

@@ -98,6 +98,5 @@ public class Game {
             render(imGui);
             imGui.render();
         }
-        texture.destroy();
     }
 }
