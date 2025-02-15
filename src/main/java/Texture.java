@@ -45,8 +45,7 @@ public class Texture {
         try {
             image = ImageIO.read(new File(loc));
             ByteBuffer buffer = loadTexture(image);
-
-            //textureID = imGui.createTexture(buffer, image.getWidth(), image.getHeight());
+            textureID = imGui.createTexture(buffer, image.getWidth(), image.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,21 +56,22 @@ public class Texture {
         int height = image.getHeight();
 
         // Create a buffer to store the image data in RGBA format
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * width * height);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * width * height).order(ByteOrder.nativeOrder());
 
         // Get the image's pixel data and store it in the buffer
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int pixel = image.getRGB(x, y);
+                byte a = (byte) ((pixel >> 24) & 0xFF);
                 byte r = (byte) ((pixel >> 16) & 0xFF);
                 byte g = (byte) ((pixel >> 8) & 0xFF);
                 byte b = (byte) (pixel & 0xFF);
-                byte a = (byte) ((pixel >> 24) & 0xFF);
 
                 buffer.put(r);
                 buffer.put(g);
                 buffer.put(b);
                 buffer.put(a);
+
             }
         }
 
@@ -80,6 +80,9 @@ public class Texture {
 
         return buffer;
     }
+
+    // Bild löschen
+    public void destroy() { if (textureID != null) textureID.deallocate();}
 
     // Bild zurückgeben
     public @NotNull JImTextureID getImage() {

@@ -31,6 +31,7 @@ public class Game {
     public int mapHeight = 16;
     public int n = 2; // Skalierungsfaktor
     public ArrayList<Texture> textures;
+    public Texture texture;
     public Camera camera;
     public Screen screen;
     private boolean running;
@@ -97,5 +98,6 @@ public class Game {
             render(imGui);
             imGui.render();
         }
+        texture.destroy();
     }
 }
