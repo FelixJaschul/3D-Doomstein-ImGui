@@ -1,2 +1,4 @@
 rootProject.name = 'Doomstein'
+include 'src:main:JavaC'
+findProject(':src:main:JavaC')?.name = 'JavaC'
 

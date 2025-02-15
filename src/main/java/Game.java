@@ -8,98 +8,94 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.*;
 // This class has the main game loop and map data
 public class Game {
 
-	private boolean running;
-	private boolean fire0 = false, fire1 = false, fire2 = false;
-	private boolean idle = true;
+    public static int[][] map =
+            // TODO Create Level-Editor for this shit
+            {
+                    {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+                    {2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 2, 2, 2},
+                    {2, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 2, 2, 2},
+                    {2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}
+            };
+    public int mapWidth = 16;
+    public int mapHeight = 16;
+    public int n = 2; // Skalierungsfaktor
+    public ArrayList<Texture> textures;
+    public Camera camera;
+    public Screen screen;
+    private boolean running;
+    private boolean fire0 = false, fire1 = false, fire2 = false;
+    private boolean idle = true;
 
-	public int mapWidth = 16;
-	public int mapHeight = 16;
-	public int n = 2; // Skalierungsfaktor
+    public Game(JImGui imGui) {
+        int width = 480 * n;
+        int height = 640 * n;
 
-	public ArrayList<Texture> textures;
-	public Camera camera;
-	public Screen screen;
+        textures = new ArrayList<>();
+        camera = new Camera(4.5, 4.5, 1, 0, 0, -.66, width, height, imGui);
+        screen = new Screen(map, mapWidth, mapHeight, textures, height, width);
 
-	public static int[][] map =
-		// TODO Create Level-Editor for this shit
-		{
-			{2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
-			{2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,2},
-			{2,0,1,1,1,1,1,0,0,0,0,0,0,0,0,2},
-			{2,0,1,0,0,0,1,0,1,0,0,0,0,0,0,2},
-			{2,0,1,0,0,0,1,0,1,1,1,0,0,2,2,2},
-			{2,0,1,0,0,0,1,0,1,0,0,0,0,0,0,2},
-			{2,0,1,0,0,0,1,0,1,0,0,0,0,0,0,2},
-			{2,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2},
-			{2,2,2,0,0,0,1,1,1,1,1,0,0,2,2,2},
-			{2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,2},
-			{2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,2},
-			{2,0,0,0,0,0,1,0,0,1,1,1,1,0,0,2},
-			{2,0,0,0,0,0,1,0,0,1,1,1,1,0,0,2},
-			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-			{2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
-		};
+        textures.add(Texture.wood);        // 0
+        textures.add(Texture.brick);        // 1
+        textures.add(Texture.bluestone);    // 2
+        textures.add(Texture.stone);        // 3
+        textures.add(Texture.floor);        // 4
+        textures.add(Texture.ceiling);        // 5
 
-	public Game(JImGui imGui) {
-		int width = 480 * n;
-		int height = 640 * n;
+        addKeyListener(camera);
+        addMouseMotionListener(camera);
+    }
 
-		textures = new ArrayList<>();
-		camera = new Camera(4.5, 4.5, 1, 0, 0, -.66, width, height, imGui);
-		screen = new Screen(map, mapWidth, mapHeight, textures, height, width);
+    public static void main(String[] args) {
+        System.setProperty("os.name", "Windows 10");
+        JniLoader.load();
 
-		textures.add(Texture.wood); 		// 0
-		textures.add(Texture.brick); 		// 1
-		textures.add(Texture.bluestone); 	// 2
-		textures.add(Texture.stone); 		// 3
-		textures.add(Texture.floor); 		// 4
-		textures.add(Texture.ceiling); 		// 5
+        try (JImGui imGui = new JImGui()) {
+            Game game = new Game(imGui);
+            game.run(imGui);
+        }
+    }
 
-		addKeyListener(camera);
-		addMouseMotionListener(camera);
-	}
+    public void render(JImGui imGui) {
+        imGui.text("Game Rendering...");
 
+        if (idle) imGui.image(Texture.handNormal.getImage(), 64, 64);
+        if (fire0) imGui.image(Texture.handFire.getImage(), 64, 64);
+        if (fire1) imGui.image(Texture.hand1BeforeFire.getImage(), 64, 64);
+        if (fire2) imGui.image(Texture.hand2BeforeFire.getImage(), 64, 64);
+    }
 
-	public void render(JImGui imGui) {
-		imGui.text("Game Rendering...");
+    public void run(JImGui imGui) {
+        long lastTime = System.nanoTime();
+        final double ns = 1000000000.0 / 60.0;
+        double delta = 0;
 
-		if (idle)  imGui.image(Texture.handNormal.getImage(), 64, 64);
-		if (fire0) imGui.image(Texture.handFire.getImage(), 64, 64);
-		if (fire1) imGui.image(Texture.hand1BeforeFire.getImage(), 64, 64);
-		if (fire2) imGui.image(Texture.hand2BeforeFire.getImage(), 64, 64);
-	}
+        int[] pixels = new int[screen.width * screen.height];
 
-	public void run(JImGui imGui) {
-		long lastTime = System.nanoTime();
-		final double ns = 1000000000.0 / 60.0;
-		double delta = 0;
+        while (!imGui.windowShouldClose()) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
 
-		int[] pixels = new int[screen.width * screen.height];
+            while (delta >= 1) {
+                pixels = screen.update(camera, pixels);
+                camera.update(map);
+                delta--;
+            }
 
-		while (!imGui.windowShouldClose()) {
-			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
-			lastTime = now;
-
-			while (delta >= 1) {
-				pixels = screen.update(camera, pixels);
-				camera.update(map);
-				delta--;
-			}
-
-			imGui.initNewFrame();
-			render(imGui);
-			imGui.render();
-		}
-	}
-
-	public static void main(String[] args) {
-		System.setProperty("os.name", "Windows 10");
-		JniLoader.load();
-
-		try (JImGui imGui = new JImGui()) {
-			Game game = new Game(imGui);
-			game.run(imGui);
-		}
-	}
+            imGui.initNewFrame();
+            render(imGui);
+            imGui.render();
+        }
+    }
 }
