@@ -79,8 +79,6 @@ public class Texture {
         return buffer;
     }
 
-    // Bild löschen public void destroy() { if (textureID != null) textureID.deallocate();}
-
     // Bild zurückgeben
     public @NotNull JImTextureID getImage() {
         return textureID;
