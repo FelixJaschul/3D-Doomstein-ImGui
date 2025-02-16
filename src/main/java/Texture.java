@@ -10,20 +10,19 @@ import java.io.IOException;
 public class Texture {
 
     public static JImGui imGui;
-    public final static Texture wood, brick, bluestone, stone, floor, ceiling, handNormal, handFire, hand2BeforeFire, hand1BeforeFire;
+    public final static Texture wood, bluestone, stone, floor, ceiling, handNormal, handFire, hand2BeforeFire, hand1BeforeFire;
 
     static {
         try {
-            wood = new Texture("res/room/wood.jpg", 64, imGui);
-            brick = new Texture("res/room/brick.jpg", 64, imGui);
-            bluestone = new Texture("res/room/bluestone.jpg", 64, imGui);
-            stone = new Texture("res/room/greystone.jpg", 64, imGui);
-            floor = new Texture("res/room/floor.jpg", 64, imGui);
-            ceiling = new Texture("res/room/ceiling.jpg", 64, imGui);
-            handNormal = new Texture("res/hand/handNormal.png", 64, imGui);
-            handFire = new Texture("res/hand/handFire.png", 64, imGui);
-            hand1BeforeFire = new Texture("res/hand/hand1BeforeFire.png", 64, imGui);
-            hand2BeforeFire = new Texture("res/hand/hand2BeforeFire.png", 64, imGui);
+            wood = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/room/wood.jpg", 64, imGui);
+            bluestone = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/room/bluestone.jpg", 64, imGui);
+            stone = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/room/greystone.jpg", 64, imGui);
+            floor = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/room/floor.jpg", 64, imGui);
+            ceiling = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/room/ceiling.jpg", 64, imGui);
+            handNormal = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/hand/handNormal.png", 64, imGui);
+            handFire = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/hand/handFire.png", 64, imGui);
+            hand1BeforeFire = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/hand/hand1BeforeFire.png", 64, imGui);
+            hand2BeforeFire = new Texture("D:/Felix/Dokumente/.NvimProjects/Doomstein/res/hand/hand2BeforeFire.png", 64, imGui);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

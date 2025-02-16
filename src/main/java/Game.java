@@ -47,7 +47,6 @@ public class Game {
         screen = new Screen(map, mapWidth, mapHeight, textures, height, width);
 
         textures.add(Texture.wood);
-        textures.add(Texture.brick);
         textures.add(Texture.bluestone);
         textures.add(Texture.stone);
         textures.add(Texture.floor);
