@@ -1,9 +1,11 @@
 import org.ice1000.jimgui.JImGui;
+import org.ice1000.jimgui.JImVec4;
 import org.ice1000.jimgui.util.JniLoader;
 
 import java.util.ArrayList;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.*;
+import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
+import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseMotionListener;
 
 // This class has the main game loop and map data
 public class Game {
@@ -35,8 +37,6 @@ public class Game {
     public Camera camera;
     public Screen screen;
     private boolean running;
-    private boolean fire0 = false, fire1 = false, fire2 = false;
-    private boolean idle = true;
 
     public Game(JImGui imGui) {
         int width = 480 * n;
@@ -55,25 +55,6 @@ public class Game {
 
         addKeyListener(camera);
         addMouseMotionListener(camera);
-    }
-
-    public static void main(String[] args) {
-        System.setProperty("os.name", "Windows 10");
-        JniLoader.load();
-
-        try (JImGui imGui = new JImGui()) {
-            Game game = new Game(imGui);
-            game.run(imGui);
-        }
-    }
-
-    public void render(JImGui imGui) {
-        imGui.text("Game Rendering...");
-
-        if (idle) imGui.image(Texture.handNormal.getImage(), 64, 64);
-        if (fire0) imGui.image(Texture.handFire.getImage(), 64, 64);
-        if (fire1) imGui.image(Texture.hand1BeforeFire.getImage(), 64, 64);
-        if (fire2) imGui.image(Texture.hand2BeforeFire.getImage(), 64, 64);
     }
 
     public void run(JImGui imGui) {
@@ -95,8 +76,23 @@ public class Game {
             }
 
             imGui.initNewFrame();
-            render(imGui);
+
+            imGui.setWindowTitle("Doomstein");
+            imGui.setBackground(JImVec4.fromHSV(0.55f, 0f, 1.0f));
+            imGui.text("Game Rendering...");
+            // imGui.image(Texture.wood.getImage(), 64, 64);
+
             imGui.render();
+        }
+    }
+
+    public static void main(String[] args) {
+        System.setProperty("os.name", "Windows 10");
+        JniLoader.load();
+
+        try (JImGui imGui = new JImGui()) {
+            Game game = new Game(imGui);
+            game.run(imGui);
         }
     }
 }

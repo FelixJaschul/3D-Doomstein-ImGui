@@ -1,7 +1,5 @@
+import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Color;
-
-import org.ice1000.jimgui.*;
 
 // this class contains most of the actual raycasting
 public class Screen {
@@ -11,13 +9,13 @@ public class Screen {
 
     public ArrayList<Texture> textures;
 
-    public Screen(int[][] m, int mapW, int mapH, ArrayList<Texture> tex, int w, int h) {
-        map = m;
-        mapWidth = mapW;
-        mapHeight = mapH;
-        textures = tex;
-        width = w;
-        height = h;
+    public Screen(int[][] map, int mapWidth, int mapHeight, ArrayList<Texture> textures, int width, int heihgt) {
+        this.map = map;
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
+        this.textures = textures;
+        this.width = width;
+        height = heihgt;
     }
 
     public int[] update(Camera camera, int[] pixels) {
@@ -36,22 +34,22 @@ public class Screen {
         for (int x = 0; x < width; x = x + 1) {
             double cameraX = 2 * x / (double) (width) - 1;
 
-            double rayDirX = camera.xDir + camera.xPlane * cameraX;
-            double rayDirY = camera.yDir + camera.yPlane * cameraX;
+            double raycastDirectionX = camera.xDirection + camera.xPlane * cameraX;
+            double raycastDirectionY = camera.yDirection + camera.yPlane * cameraX;
 
             // Map position
-            int mapX = (int) camera.xPos;
-            int mapY = (int) camera.yPos;
+            int mapX = (int) camera.xPosition;
+            int mapY = (int) camera.yPosition;
 
             // length of ray from current position to next x or y-side
-            double sideDistX;
-            double sideDistY;
+            double sideDistanceX;
+            double sideDistanceY;
 
             // Length of ray from one side to next in map
-            double deltaDistX = Math.sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
-            double deltaDistY = Math.sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
+            double deltaDistanceX = Math.sqrt(1 + (raycastDirectionY * raycastDirectionY) / (raycastDirectionX * raycastDirectionX));
+            double deltaDistanceY = Math.sqrt(1 + (raycastDirectionX * raycastDirectionX) / (raycastDirectionY * raycastDirectionY));
 
-            double perpWallDist;
+            double perpWallDistance;
 
             int stepX, stepY; // Direction to go in x and y
 
@@ -59,29 +57,29 @@ public class Screen {
 
             int side = 0; // was the wall vertical or horizontal
 
-            if (rayDirX < 0) { // Figure out the step direction and initial distance to a side
+            if (raycastDirectionX < 0) { // Figure out the step direction and initial distance to a side
                 stepX = -1;
-                sideDistX = (camera.xPos - mapX) * deltaDistX;
+                sideDistanceX = (camera.xPosition - mapX) * deltaDistanceX;
             } else {
                 stepX = 1;
-                sideDistX = (mapX + 1.0 - camera.xPos) * deltaDistX;
+                sideDistanceX = (mapX + 1.0 - camera.xPosition) * deltaDistanceX;
             }
 
-            if (rayDirY < 0) {
+            if (raycastDirectionY < 0) {
                 stepY = -1;
-                sideDistY = (camera.yPos - mapY) * deltaDistY;
+                sideDistanceY = (camera.yPosition - mapY) * deltaDistanceY;
             } else {
                 stepY = 1;
-                sideDistY = (mapY + 1.0 - camera.yPos) * deltaDistY;
+                sideDistanceY = (mapY + 1.0 - camera.yPosition) * deltaDistanceY;
             }
 
             while (!hit) { // Loop to find where the ray hits a wall
-                if (sideDistX < sideDistY) { // Jump to next square
-                    sideDistX += deltaDistX;
+                if (sideDistanceX < sideDistanceY) { // Jump to next square
+                    sideDistanceX += deltaDistanceX;
                     mapX += stepX;
                     side = 0;
                 } else {
-                    sideDistY += deltaDistY;
+                    sideDistanceY += deltaDistanceY;
                     mapY += stepY;
                     side = 1;
                 }
@@ -90,13 +88,13 @@ public class Screen {
             }
 
             // Calculate distance to the point of impact
-            if (side == 0) perpWallDist = Math.abs((mapX - camera.xPos + (1 - stepX) / 2) / rayDirX);
-            else perpWallDist = Math.abs((mapY - camera.yPos + (1 - stepY) / 2) / rayDirY);
+            if (side == 0) perpWallDistance = Math.abs((mapX - camera.xPosition + (1 - stepX) / 2) / raycastDirectionX);
+            else perpWallDistance = Math.abs((mapY - camera.yPosition + (1 - stepY) / 2) / raycastDirectionY);
 
             // Now calculate the height of the wall based on the distance from the camera
             int lineHeight;
 
-            if (perpWallDist > 0) lineHeight = Math.abs((int) (height / perpWallDist));
+            if (perpWallDistance > 0) lineHeight = Math.abs((int) (height / perpWallDistance));
             else lineHeight = height;
 
             // calculate lowest and highest pixel to fill in current stripe
@@ -109,39 +107,38 @@ public class Screen {
             if (drawEnd >= height) drawEnd = height - 1;
 
             // add a texture
-            int texNum = map[mapX][mapY] - 1;
+            int textureNumber = map[mapX][mapY] - 1;
             double wallX; // Exact position of where wall was hit
 
             // If it's a y-axis wall
-            if (side == 1) wallX = (camera.xPos + ((mapY - camera.yPos + (1 - stepY) / 2) / rayDirY) * rayDirX);
-            else wallX = (camera.yPos + ((mapX - camera.xPos + (1 - stepX) / 2) / rayDirX) * rayDirY); // X-axis wall
+            if (side == 1) wallX = (camera.xPosition + ((mapY - camera.yPosition + (1 - stepY) / 2) / raycastDirectionY) * raycastDirectionX);
+            else wallX = (camera.yPosition + ((mapX - camera.xPosition + (1 - stepX) / 2) / raycastDirectionX) * raycastDirectionY); // X-axis wall
 
             wallX -= Math.floor(wallX);
 
-            int texX = (int) (wallX * (textures.get(texNum).SIZE)); // x coordinate on the texture
+            int textureX = (int) (wallX * (textures.get(textureNumber).size)); // x coordinate on the texture
 
-            if (side == 0 && rayDirX > 0) texX = textures.get(texNum).SIZE - texX - 1;
-            if (side == 1 && rayDirY < 0) texX = textures.get(texNum).SIZE - texX - 1;
+            if (side == 0 && raycastDirectionX > 0) textureX = textures.get(textureNumber).size - textureX - 1;
+            if (side == 1 && raycastDirectionY < 0) textureX = textures.get(textureNumber).size - textureX - 1;
 
             // calculate y coordinate on texture
             for (int y = drawStart; y < drawEnd; y++) {
                 int color;
                 int texY = (((y * 2 - height + lineHeight) << 6) / lineHeight) / 2;
 
-                if (side == 0) color = textures.get(texNum).pixels[texX + (texY * textures.get(texNum).SIZE)];
-                else
-                    color = (textures.get(texNum).pixels[texX + (texY * textures.get(texNum).SIZE)] >> 1) & 8355711; // Make y sides darker
+                if (side == 0) color = textures.get(textureNumber).pixelsArray[textureX + (texY * textures.get(textureNumber).size)];
+                else color = (textures.get(textureNumber).pixelsArray[textureX + (texY * textures.get(textureNumber).size)] >> 1) & 8355711; // Make y sides darker
 
-                int r = (color >> 16) & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = color & 0xFF;
+                int red = (color >> 16) & 0xFF;
+                int green = (color >> 8) & 0xFF;
+                int blue = color & 0xFF;
 
                 int factor = 32; // Higher factor = fewer colors, more pixel-art look
-                r = (r / factor) * factor;
-                g = (g / factor) * factor;
-                b = (b / factor) * factor;
+                red = (red / factor) * factor;
+                green = (green / factor) * factor;
+                blue = (blue / factor) * factor;
 
-                color = (r << 16) | (g << 8) | b;
+                color = (red << 16) | (green << 8) | blue;
 
                 pixels[x + y * (width)] = color;
             }
