@@ -48,9 +48,7 @@ public class Texture {
             int width = image.getWidth();
             int height = image.getHeight();
             image.getRGB(0, 0, width, height, pixelsArray, 0, width);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public JImTextureID getImage() {
